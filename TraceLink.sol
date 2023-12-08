@@ -85,7 +85,7 @@ contract TraceLink {
 
     //Show function to call externally
     function showPDetails() public view returns (Product memory p) {
-        p = Pmap[current_pid];
+        p = Pmap[1];
         return p;
     }
 
