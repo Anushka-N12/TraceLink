@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block page %}
+<title>TraceLink: Login</title>
+<link rel="stylesheet" , href="../static/styles/login.css">
+
+<!-- Google Font type -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+    integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+{% endblock %}
+
+{% block nav %}
+<div class="rightnav">
+    <a class='nav-link' href=''>LOGIN</a>
+</div>
+{% endblock %}
+
+{% block custom %}
+<button type="button" onclick="signup()">REGISTER</button>
+<button type="button" onclick="login()">LOGIN</button>
+
+<div id="chosen">
+    <form method="post" action='.'>
+        <fieldset id="inps">
+            <label class="normal" for="cid"><i class="fa fa-building normal" aria-hidden="true"></i></i>
+                <!-- &nbsp&nbsp -->
+                <input id="cid" required placeholder="Company ID" class="normal" /></label>
+            <br>
+            <label for="emp" id="emp" class="normal"><i class="fa fa-user normal" aria-hidden="true"></i>
+                <!-- &nbsp&nbsp -->
+                <input id="empid" required placeholder="Employee ID" class="normal" /></label>
+            <br>
+            <label class="normal" for="password"><i class="fa fa-lock normal" aria-hidden="true"></i>
+                <!-- &nbsp&nbsp -->
+                <input id="password" class="normal" type="password"
+                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
+                    title="Please enter atleast 8 characters, with one uppercase letter, one lowercase letter & one number"
+                    required placeholder="Password" /></label>
+            <br>
+            <label class="newl" for="email" id="emaill"><i class="fa fa-envelope" aria-hidden="true"></i>
+                <input id="email" class="newi" type="email" placeholder="Work Email ID" /></label>
+            <br>
+            <label class="newl" for="cid" id="cidl"><i class="fa fa-building" aria-hidden="true"></i></i>
+                <!-- &nbsp&nbsp -->
+                <input id="cid" placeholder="Registered Company ID" class="newi" /></label>
+            <br>
+        </fieldset>
+        <input id="submit" type="submit" value="Submit" />
+    </form>
+</div>
+<br>
+
+<!-- <form method="post" action=''>
+    <fieldset>
+        <label for="PId">Enter Product No. : &nbsp&nbsp&nbsp&nbsp<input id="PId" name="Product Id" type="text"
+                required /></label>
+    </fieldset>
+    <input type="submit" id="submit" hidefocus="true" /> -->
+</form>
+<script src='{{ url_for("static", filename="login.js") }}'></script>
+{% endblock %}

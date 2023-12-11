@@ -43,12 +43,11 @@ TraceLink = w3.eth.contract(abi=ABI, bytecode=bytecode)
 # Deploy the contract
 tx_hash = TraceLink.constructor().transact({
     "from": my_address,
-    "gas": 5_000_000,  # Adjust the gas limit as needed
+    "gas": 3000000,  # Adjust the gas limit as needed
 })
 tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
 contract_address = tx_receipt["contractAddress"]
 TraceLink = w3.eth.contract(address=contract_address, abi=ABI)
-print(f"Done! Contract deployed to {tx_receipt.contractAddress}")
 
 # Working with deployed Contracts
 trace_link = w3.eth.contract(address=contract_address, abi=ABI)
@@ -60,24 +59,19 @@ def txn_steps(txn):
     txn_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
 
 # Uncomment and modify the following function call as needed
-def showDetails(pid, pnum):
-    funcs.updateCount(pid, pnum).transact({'from':w3.eth.accounts[0]})
-    #build_transaction({
-        # "chainId": chain_id,
-        # "gasPrice": 5_000_000_000, #w3.eth.gas_price*50,
-    #     "from": my_address,
-    #     "nonce": w3.eth.get_transaction_count(my_address) + 1,
-    # })
-    # txn_steps(txn)
-    # print('Count updated!')
-    return(funcs.showPDetails().call())
-
-def showC(section):
-    funcs.updateCft(section[0], section[1]).transact({'from':w3.eth.accounts[0]})
-    return(funcs.showC().call())
+def showDetails(num):
+    pid, pnum = num.split('x')
+    pid, pnum = int(pid), int(pnum)
+    txn = funcs.updateCount(pid, pnum).build_transaction({
+        "chainId": chain_id,
+        "gasPrice": 100_000_000_000, #w3.eth.gas_price*50,
+        "from": my_address,
+        "nonce": w3.eth.get_transaction_count(my_address) + 1,
+    })
+    txn_steps(txn)
+    print('Count updated!')
+    print(funcs.showPDetails().call())
 
 #Uncomment and modify the following function call as needed
-# showDetails('1x3')
-# showDetails('1x3')
-# def sendData():
-    # return(funcs.showPDetails().call())
+showDetails('1x3')
+# print(funcs.showPDetails().call())

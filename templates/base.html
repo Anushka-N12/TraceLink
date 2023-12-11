@@ -1,0 +1,92 @@
+<!-- "TraceLink" is a proposed system to ensure transparency of product manufacturing & transport to customers. 
+      It can be enforced by government authorities, or even companies themselves, to counter fake manufacturers.
+      The system allows registered companies to add products with details like time, location & description, and allows
+      further additions by related organizations with access controls, and securely stores this information on the blockchain.
+      Customers can view this information with generated unique QR codes for each product. A device is also built to 
+      inspect stores or even warehouses to verify if packagings match entered data. -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  {% block page %}{% endblock %}
+
+  <link rel="stylesheet" , href="../static/styles/stylebase.css">
+
+  <!-- Google Font type -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+  <header id='header'>
+    <nav id='nav-bar'>
+      <img class='header-img' src="/static/Logo_only.png">
+      <img class='header-img' src="/static/Logo_Text.png">
+      <a class='nav-link' href=''>HOME</a>
+      {% block nav %} {% endblock %}
+    </nav>
+  </header>
+
+
+  <div id="content">
+    <div id="intro">
+      Know where your product has been, who's made it, who's brought it to you -
+      TraceLink shows you everything about what you buy.
+      <div id="points">
+        <div class="point">
+          <span>01</span>
+          Unique QR codes for customers to have direct access
+        </div>
+        <div class="point">
+          <span>02</span>
+          Access-controled website where companies input information
+        </div>
+        <div class="point">
+          <span>03</span>
+          Data stored securely on the blockchain, kept immutable
+        </div>
+        <div class="point">
+          <span>04</span>
+          Advanced robotic solution for authorities to perform inspections
+        </div>
+      </div>
+    </div>
+    <div id="custom">
+      {% block custom %} {% endblock %}
+    </div>
+    blahhhhhhhhh testing position
+    <p>ivuahestiburyj</p>
+    <p>ivuahestiburyj</p>
+    <p>ivuahestiburyj</p>
+    <p>ivuahestiburyj</p>
+    <p>ivuahestiburyj</p>
+    <p>ivuahestiburyj</p>
+    <p>ivuahestiburyj</p>
+    <p>ivuahestiburyj</p>
+    <p>ivuahestiburyj</p>
+    <p>ivuahestiburyj</p>
+    <p>ivuahestiburyj</p>
+    <p>ivuahestiburyj</p>
+    <p>ivuahestiburyj</p>
+    <p>ivuahestiburyj</p>
+
+  </div>
+
+  <footer>
+    <p>
+      <a href=''>Privacy</a>
+      &nbsp&nbsp
+      <!-- <a href=''>Contact</a>
+          &nbsp&nbsp -->
+    </p>
+  </footer>
+  <script src="../static/base.js"></script>
+</body>
+
+</html>

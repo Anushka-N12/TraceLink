@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block page %}
+<title>TraceLink: Home</title>
+{% endblock %}
+
+{% block nav %}
+<div class="rightnav">
+    <a class='nav-link' href=''>LOGIN</a>
+</div>
+{% endblock %}
+
+{% block custom %}
+<form method="post" action='.'>
+    <fieldset>
+        <label for="PId">Enter Product No. : &nbsp&nbsp&nbsp&nbsp<input id="PId" class="inp" name="ProductId"
+                type="text" required /></label>
+    </fieldset>
+    <input type="submit" id="submit" class="hidesubmit" hidefocus="true" />
+</form>
+{% for d in data%}
+<p name='data' value='{{d}}''>{{d}}</p>
+{% endfor %}
+{% endblock %}
