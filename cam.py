@@ -1,9 +1,7 @@
-import cv2, queue, threading
+import cv2
 import numpy as np
 import requests
-
-url = 'http://10.5.20.33'
-cap = cv2.VideoCapture(url + ":81/stream")
+from pyzbar.pyzbar import decode
 
 def set_resolution(url: str, index: int=1, verbose: bool=False):
     try:
@@ -33,30 +31,30 @@ def set_awb(url: str, awb: int=1):
         print("SET_QUALITY: something went wrong")
     return awb
 
-if __name__ == '__main__':
+def getimg(url):
+    cap = cv2.VideoCapture(url + ":81/stream")
     set_resolution(url, index=8)
-    n = 0
-    while True:
-        if cap.isOpened():
-            cap.set(cv2.CAP_PROP_BUFFERSIZE, 0)
-            ret, frame = cap.read()
-
-            if ret:
-                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-                gray = cv2.equalizeHist(gray)
-            cv2.imshow("frame", frame)
-            if n != 10:
+    n,x = 0,[]
+    while n!= 20:
+        try:
+            if cap.isOpened():
+                cap.set(cv2.CAP_PROP_BUFFERSIZE, 0)
+                ret, frame = cap.read()
+                if ret:
+                    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                    gray = cv2.equalizeHist(gray)
+                # cv2.imshow("frame", frame)
                 n += 1
-            else:
-                cv2.imwrite("frame.jpg", frame)  
-                n = 0
-        key = cv2.waitKey(1)
-
-        if key == ord('n'):
+                cv2.imwrite("media/frame.jpg", frame)  
+                # frame.set(5,640)
+                # frame.set(6,480)
+                for i in decode(frame):
+                    x.append(i.data.decode('utf-8'))
+        except:
             pass
-        elif key == 27:
-                break
 
     cv2.destroyAllWindows()
     cap.release()
+    return x
+# print(getimg('http://10.5.35.138'))
 

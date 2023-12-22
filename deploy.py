@@ -43,7 +43,7 @@ TraceLink = w3.eth.contract(abi=ABI, bytecode=bytecode)
 # Deploy the contract
 tx_hash = TraceLink.constructor().transact({
     "from": my_address,
-    "gas": 5_000_000,  # Adjust the gas limit as needed
+    "gas": 6_000_000,  # Adjust the gas limit as needed
 })
 tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
 contract_address = tx_receipt["contractAddress"]

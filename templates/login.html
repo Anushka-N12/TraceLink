@@ -23,33 +23,33 @@
 {% endblock %}
 
 {% block custom %}
-<button type="button" onclick="signup()">REGISTER</button>
-<button type="button" onclick="login()">LOGIN</button>
+<button type="button" id="reg" onclick="signup()">REGISTER</button>
+<button type="button" id="log" onclick="login()">LOGIN</button>
 
 <div id="chosen">
-    <form method="post" action='.'>
+    <form method="post" action='/login'>
         <fieldset id="inps">
-            <label class="normal" for="cid"><i class="fa fa-building normal" aria-hidden="true"></i></i>
+            <label class="normal" id="cid" for="cid"><i class="fa fa-building normal" aria-hidden="true"></i></i>
                 <!-- &nbsp&nbsp -->
-                <input id="cid" required placeholder="Company ID" class="normal" /></label>
+                <input name="CompanyId" id="cidi" required placeholder="Company ID" class="normal" /></label>
             <br>
-            <label for="emp" id="emp" class="normal"><i class="fa fa-user normal" aria-hidden="true"></i>
+            <label for="emp" id="emp" class="norm"><i class="fa fa-user norm" aria-hidden="true"></i>
                 <!-- &nbsp&nbsp -->
-                <input id="empid" required placeholder="Employee ID" class="normal" /></label>
+                <input id="empid" name="EmployeeId" required placeholder="Employee ID" class="norm" /></label>
             <br>
             <label class="normal" for="password"><i class="fa fa-lock normal" aria-hidden="true"></i>
                 <!-- &nbsp&nbsp -->
                 <input id="password" class="normal" type="password"
                     pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
                     title="Please enter atleast 8 characters, with one uppercase letter, one lowercase letter & one number"
-                    required placeholder="Password" /></label>
+                    required placeholder="Password" name="pw" /></label>
             <br>
             <label class="newl" for="email" id="emaill"><i class="fa fa-envelope" aria-hidden="true"></i>
-                <input id="email" class="newi" type="email" placeholder="Work Email ID" /></label>
+                <input name="Wemail" id="email" class="newi" type="email" placeholder="Work Email ID" /></label>
             <br>
             <label class="newl" for="cid" id="cidl"><i class="fa fa-building" aria-hidden="true"></i></i>
                 <!-- &nbsp&nbsp -->
-                <input id="cid" placeholder="Registered Company ID" class="newi" /></label>
+                <input name="rcid" id="cid" placeholder="Registered Company ID" class="newi" /></label>
             <br>
         </fieldset>
         <input id="submit" type="submit" value="Submit" />

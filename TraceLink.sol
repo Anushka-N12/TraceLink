@@ -148,8 +148,8 @@ contract TraceLink {
         string memory Name,
         string memory CompanyType
     ) public  {
-        Company storage c = Cmap[CmapSize];
-        c.CId = CmapSize;
+        Company storage c = Cmap[CmapSize+1];
+        c.CId = CmapSize+1;
         c.CName = Name;
         c.CType = CompanyType;
         CmapSize += 1;
@@ -213,18 +213,27 @@ contract TraceLink {
                     'X Province, China'
                 );
         addCompany("Iran Farmers' Union", "Saffron Farming Corporation");
+        addCompany('Blackmores', 'Herb Packaging');
         StoreProduct(
-            3,
+            10,
             "Grade 1 Pure Saffron ",
-            "Irani Royals",
+            "Blackmores",
             'Negin & Sargol parts of stigma hand-picked',
             50,
             9,
-            2,
+            10,
             "12948738-435", //Automatically taken
-            "Exporting 50kg of produce globally",
+            "Produce transporting to packaging venue",
             "Tehran, Iran"  //Automatically taken
         );
+        StoreSCS(
+                    3,
+                    10,
+                    2,
+                    'm00375638',
+                    'Exporting 5kg of produce ie. 50 pieces globally',
+                    'Jebel Ali Port, Dubai'
+                );
         StoreSCS(
                     3,
                     2,
