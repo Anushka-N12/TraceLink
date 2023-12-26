@@ -56,5 +56,7 @@ def getimg(url):
     cv2.destroyAllWindows()
     cap.release()
     return x
-# print(getimg('http://10.5.35.138'))
+
+if __name__ == '__main__':
+    print(getimg('http://10.5.35.138'))
 

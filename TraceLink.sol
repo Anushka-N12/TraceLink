@@ -35,6 +35,7 @@ contract TraceLink {
         uint FromId;
         uint ToId;
         string EmpId;
+        bool comp;
         string Task;
         string Location;
         uint TimeOfHandOver;
@@ -52,6 +53,7 @@ contract TraceLink {
         uint FId,
         uint To_Id,
         string memory EmployeeId,
+        bool comp,
         string memory TaskDetails,
         string memory Current_Location
     ) public returns (uint ProductId) {
@@ -70,6 +72,7 @@ contract TraceLink {
                 FId,
                 To_Id,
                 EmployeeId,
+                comp,
                 TaskDetails,
                 Current_Location,
                 block.timestamp
@@ -120,6 +123,7 @@ contract TraceLink {
         uint FId,
         uint To_Id,
         string memory EmployeeId,
+        bool comp,
         string memory TaskDetails,
         string memory Current_Location
     ) public {
@@ -134,6 +138,7 @@ contract TraceLink {
                     FId,
                     To_Id,
                     EmployeeId,
+                    comp,
                     TaskDetails,
                     Current_Location,
                     block.timestamp
@@ -154,6 +159,16 @@ contract TraceLink {
         c.CType = CompanyType;
         CmapSize += 1;
     }
+    
+    function showCP()
+        public
+        view
+        returns (uint csize, uint psize)
+    {
+        csize = CmapSize;
+        psize = PmapSize;
+        return (csize, psize);
+    }
 
     constructor() public {
         addCompany("Gucci", "Luxury Fashion");
@@ -173,6 +188,7 @@ contract TraceLink {
             1,
             1,
             "m00851749", //Automatically taken
+            true,
             "Order given to our factory 112 in Ajman",
             "Al Sufouh, Dubai"  //Automatically taken
         );
@@ -181,6 +197,7 @@ contract TraceLink {
                     1,
                     1,
                     'm00375638',
+                    true,
                     'Manufactured products handed over to our warehouse 065',
                     'Sreet 24, Ajman'
                 );
@@ -189,6 +206,7 @@ contract TraceLink {
                     1,
                     5,
                     'm003732439',
+                    true,
                     'Handed over to Offer House Ent. for retail sales',
                     'JLT, Dubai'
                 );
@@ -201,6 +219,7 @@ contract TraceLink {
             6,
             7,
             "xab3857x", //Automatically taken
+            true,
             "Order given to outsourced factory Express in X province",
             "Shanghai, China"  //Automatically taken
         );
@@ -209,6 +228,7 @@ contract TraceLink {
                     7,
                     8,
                     'dfjhb7777',
+                    true,
                     'Shipped to Alibaba warehouse 201',
                     'X Province, China'
                 );
@@ -223,6 +243,7 @@ contract TraceLink {
             9,
             10,
             "12948738-435", //Automatically taken
+            false,
             "Produce transporting to packaging venue",
             "Tehran, Iran"  //Automatically taken
         );
@@ -231,6 +252,7 @@ contract TraceLink {
                     10,
                     2,
                     'm00375638',
+                    true,
                     'Exporting 5kg of produce ie. 50 pieces globally',
                     'Jebel Ali Port, Dubai'
                 );
@@ -239,8 +261,10 @@ contract TraceLink {
                     2,
                     4,
                     'm00375638',
+                    true,
                     '25kg given to Madina',
                     'Jebel Ali Port, Dubai'
                 );
+        addCompany("xpharma", "sample for login testing");
     }
 }

@@ -18,4 +18,6 @@ def detect():
     for label in response2.text_annotations:
         l.append(label.description)
     return(l)
-# print(detect())
+
+if __name__ == '__main__':
+    print(detect())

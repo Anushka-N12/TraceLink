@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block page %}
-<title>TraceLink: Response</title>
+<title>TraceLink: Options</title>
 <link rel="stylesheet" , href="../static/styles/add.css">
 {% endblock %}
 
@@ -16,40 +16,40 @@
 <button type="button" id="log" onclick="add2sc()">LOG TO PRODUCT</button>
 
 <div id="chosen">
-    <form method="post" action='.'>
+    <form method="post" action='/company'>
         <fieldset id="inps">
 
             <!-- employee id & company id taken during login -->
             <label class="b2" for="pid" id="pid">Product Id:
-                <input id="pidi" class="b2i" /></label>
+                <input name="pidi" id="pidi" class="b2i" /></label>
             <br>
             <label class="b1" id="pname" for="product name">Product Name:
-                <input name="name" id="namei" required class="b1i" /></label>
+                <input name="namei" id="namei" required class="b1i" /></label>
             <br>
             <label for="brand" id="brand" class="b1">Brand:
-                <input id="brandi" name="Brand" required class="b1i" /></label>
+                <input id="brandi" name="brandi" required class="b1i" /></label>
             <br>
             <label class="b1" for="desc">Description:
-                <input id="desc" class="b1i" type="password" required name="desc" /></label>
+                <input id="desc" class="b1i" required name="desc" /></label>
             <br>
             <label class="b1" for="quantity" id="quant">Quantity:
-                <input id="quanti" class="b1i" required /></label>
+                <input name="quanti" id="quanti" class="b1i" required /></label>
             <br>
-            <label class="b1" for="task" id="task">Task:
-                <input id="taski" class="b1i" /></label>
+            <label class="all" for="task" id="task">Task:
+                <input name="taski" id="taski" class="alli" required /></label>
             <!-- Location to be added -->
             <br>
             <label class="all" for="fid" id="fid">From:
-                <input id="fidi" class="all" /></label>
+                <input name="fidi" id="fidi" class="alli" required /></label>
             <br>
             <label class="all" for="tid" id="tid">To:
-                <input id="tidi" class="all" /></label>
+                <input name="tidi" id="tidi" class="alli" required /></label>
             <br>
-
+            <p class="all">Note: Time, location & login details are taken automatically.</p>
         </fieldset>
         <input id="submit" type="submit" value="Submit" />
     </form>
 </div>
 <br>
-<script src='{{ url_for("static", filename="add.js") }}'></script>
+<script src='{{ url_for("static", filename="add2.js") }}'></script>
 {% endblock %}

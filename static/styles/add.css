@@ -18,8 +18,6 @@ input {
     color: #f0f8ff;
     padding: 5px 10px;
     margin: 10px;
-    transition: all 1s ease-in-out;
-    -webkit-transition: all 1s ease-in-out;
 }
 
 #chosen {
@@ -34,9 +32,16 @@ input {
 .b1i,
 .b2,
 .b2i,
-.all {
+.all,
+.alli {
     height: 2em;
     font-size: small;
+    transition: all 1s ease-in-out;
+    -webkit-transition: all 1s ease-in-out;
+}
+
+.b2 {
+    visibility: hidden;
 }
 
 #submit {
@@ -44,4 +49,9 @@ input {
     border-radius: 50px;
     background-color: #dae9f7;
     color: #010101;
+}
+
+p {
+    font-size: small;
+    translate: 20px 10px;
 }

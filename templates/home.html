@@ -6,12 +6,12 @@
 
 {% block nav %}
 <div class="rightnav">
-    <a class='nav-link' href=''>LOGIN</a>
+    <a class='nav-link' href='{{url_for("login")}}'>LOGIN</a>
 </div>
 {% endblock %}
 
 {% block custom %}
-<form method="post" action='/'>
+<form method="post" action='/home'>
     <fieldset>
         <label for="PId">Enter Product No. : &nbsp&nbsp&nbsp&nbsp<input id="PId" class="inp" name="ProductId"
                 type="text" required /></label>

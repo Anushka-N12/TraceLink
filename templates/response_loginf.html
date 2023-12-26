@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block page %}
+<title>TraceLink: Response</title>
+{% endblock %}
+
+{% block nav %}
+<div class="rightnav">
+    <a class='nav-link' href='{{url_for("login")}}'>LOGIN</a>
+</div>
+{% endblock %}
+
+{% block custom %}
+Login authentication failed
+{% endblock %}

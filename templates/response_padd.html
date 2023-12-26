@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block page %}
+<title>TraceLink: Response</title>
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+    integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% endblock %}
+
+{% block nav %}
+<div class="rightnav">
+    <a class='nav-link' href=''><i class="fa fa-user norm" aria-hidden="true"></i></a>
+    <a class='nav-link' href='{{url_for("company")}}'>OPTIONS</a>
+</div>
+{% endblock %}
+
+{% block custom %}
+Product successfully added! Your product number is {{data}}. Each piece of your product will now be like
+numberxquantity, eg. piece 49 of product 123 will be 123x49.
+<button type="button" id="download" onclick="download()">Download</button>
+{% endblock %}

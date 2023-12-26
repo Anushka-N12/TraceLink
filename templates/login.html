@@ -17,9 +17,6 @@
 {% endblock %}
 
 {% block nav %}
-<div class="rightnav">
-    <a class='nav-link' href=''>LOGIN</a>
-</div>
 {% endblock %}
 
 {% block custom %}
@@ -40,7 +37,7 @@
             <label class="normal" for="password"><i class="fa fa-lock normal" aria-hidden="true"></i>
                 <!-- &nbsp&nbsp -->
                 <input id="password" class="normal" type="password"
-                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
+                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{4,}$"
                     title="Please enter atleast 8 characters, with one uppercase letter, one lowercase letter & one number"
                     required placeholder="Password" name="pw" /></label>
             <br>

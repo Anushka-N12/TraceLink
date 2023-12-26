@@ -1,2 +1,6 @@
-import requests
-requests.get('http://10.5.39.195/LED=ON')
+x='1'
+def test():
+    x = '2'
+    print(x)
+test()
+print(x)
