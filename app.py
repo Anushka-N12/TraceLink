@@ -82,23 +82,34 @@ def result():
     if True:
         result = False
         #might have to move run here
-        qr = cam.getimg(os.getenv('esp1'))
+        url = os.getenv('esp_1')
+        print('Taking pic')
+        qr = cam.getimg(url)
         if len(qr) > 0:
             qr = qr[0]
             num = qr.split('/')[-1].split('x')
             pid, pnum = num[0], num[1]
             data = deploy.showDetails(int(pid), int(pnum))
             name = data[2].lower()
+            print('Detecting pic')
             logo = logo_d.detect()
             for i in logo:
                 if name in i.lower():
                     result = True
-        esp2 = os.getenv('esp2')
+        print('Triggering esp')
+        esp2 = os.getenv('esp_2')
+        print(esp2)
         try:
             if result:
-                requests.get(esp2 + '/LED=OFF')
+                print('Supposed to turn green')
+                blah = esp2 + '/LED=OFF'
+                print(blah)
+                requests.get(blah)
             else:
-                requests.get(esp2 + '/LED=ON')
+                print('Supposed to turn red')
+                blah = esp2 + '/LED=ON'
+                print(blah)
+                requests.get(blah)
         except:
             pass
         

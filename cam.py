@@ -32,6 +32,8 @@ def set_awb(url: str, awb: int=1):
     return awb
 
 def getimg(url):
+    # print(url)
+    # print(type(url))s
     cap = cv2.VideoCapture(url + ":81/stream")
     set_resolution(url, index=8)
     n,x = 0,[]
@@ -55,6 +57,7 @@ def getimg(url):
 
     cv2.destroyAllWindows()
     cap.release()
+    print(x)
     return x
 
 if __name__ == '__main__':
