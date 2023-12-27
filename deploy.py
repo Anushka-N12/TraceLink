@@ -71,8 +71,8 @@ def showC(section):
     funcs.updateCft(section[0], section[1]).transact({'from':w3.eth.accounts[0]})
     return(funcs.showC().call())
 
-def addP(company, name, brand, desc, quant, fid, tid, e_id, e, task, loc):
-    funcs.StoreProduct(company, name, brand, desc, quant, fid, tid, e_id, e, task, loc).transact({'from':w3.eth.accounts[0]})
+def addP(company, name, desc, quant, fid, tid, e_id, e, task, loc):
+    funcs.StoreProduct(company, name, desc, quant, fid, tid, e_id, e, task, loc).transact({'from':w3.eth.accounts[0]})
     return(funcs.showCP().call()[1])
 def storePi(pid, fid, tid, e_id, e, task, loc):
     funcs.StoreSCS(pid, fid, tid, e_id, e, task, loc).transact({'from':w3.eth.accounts[0]})

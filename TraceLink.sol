@@ -17,9 +17,9 @@ contract TraceLink {
     struct Product {
         uint PId;
         string PName;
-        string Brand;
+        uint Brand;
         string Desc;
-        uint[] clicks;
+        int[] clicks;
         SCSection[] SChain;
     }
 
@@ -47,7 +47,6 @@ contract TraceLink {
     function StoreProduct(
         uint CompanyId,
         string memory ProductName,
-        string memory PBrand,
         string memory pdesc,
         uint quant,
         uint FId,
@@ -61,7 +60,7 @@ contract TraceLink {
         Product storage p = Pmap[ProductId];
         p.PId = ProductId;
         p.PName = ProductName;
-        p.Brand = PBrand;
+        p.Brand = CompanyId;
         p.Desc = pdesc;
         for (uint256 i = 0; i < quant; i++) {
             p.clicks.push(0);
@@ -182,7 +181,6 @@ contract TraceLink {
         StoreProduct(
             1,
             "GG Marmount Small Shoulder Bag",
-            "Gucci",
             '2023 Winter Collection',
             50,
             1,
@@ -213,7 +211,6 @@ contract TraceLink {
         StoreProduct(
             6,
             "Weixi T 11",
-            "XaXiozhi",
             '2023 Main Release',
             100,
             6,
@@ -237,7 +234,6 @@ contract TraceLink {
         StoreProduct(
             10,
             "Grade 1 Pure Saffron ",
-            "Blackmores",
             'Negin & Sargol parts of stigma hand-picked',
             50,
             9,

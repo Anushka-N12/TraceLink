@@ -1,13 +1,15 @@
-from flask import Flask, render_template, request, redirect, make_response, Response
-import subprocess
-import deploy
-from datetime import datetime
-import json, os, serial
-import cam, logo_d, database
-import requests
-import time
-from dotenv import load_dotenv
-from urllib.request import urlopen
+#Import neccessary libraries
+from flask import Flask, render_template, request, redirect, make_response, Response  #Main backend framework
+import subprocess                      # To run scripts
+import deploy                          # Script that runs the smart contract and has functions to interact with it
+import time                            # To take timestamps when changes are made
+from datetime import datetime          # To convert timestamps to readable format
+import json, os                        # Reading & writing data of JSON format, accessing environment variables
+from dotenv import load_dotenv         # Access to environment variables
+import cam, logo_d, database           # Script that GETs data from camera, logo detector, SQL database access
+import requests                        # To send GET request to ESP32
+from urllib.request import urlopen     # For getting current location
+import smtplib                         # To send emails aka alerts
 
 subprocess.run(["python", "deploy.py"])
 # subprocess.run(["python", "cam.py"])
@@ -20,7 +22,7 @@ def format_data(num):
     if pdata != 0:
         id = 'Product Id: ' + str(pdata[0]) + '\n'
         name = 'Product Name: ' + str(pdata[1]) + '\n'
-        brand = 'Brand: ' + str(pdata[2]) + '\n'
+        brand = 'Brand: ' + str(deploy.showC((pdata[2], pdata[2]))[0]) + '\n'
         desc = 'Description: ' + str(pdata[3])
         quant = 'Quantity Ordered: ' + str(len(pdata[4])) + '\n'
         piece = 'Your piece is no. : ' + str(pnum) + '\n'
@@ -44,11 +46,20 @@ def format_data(num):
                 enterer = tc
             entries += f'\tThe above information was entered by Employee Id {i[3]} from {enterer}\n -- '
             count += 1
-        data = id + name + brand + quant + piece + clicks + entries
+        data = id + name + brand + desc + quant + piece + clicks + entries
         data = data.split('\n')
         return(data)
     else:
         return 'Product not found'
+
+def sendemail(message, emailid):
+    s = smtplib.SMTP('smtp.gmail.com', 587)           # Starting session
+    s.starttls()                                      # Starting TLS for security
+    s.login(os.getenv('gmail'), os.getenv('gpw'))      # Authentication
+    ''' Currently I am using my personal gmail id & password to send alerts,
+        but this must be changed to a government address in implementation '''
+    s.sendmail(os.getenv('gmail'), emailid, message)  # Sending
+    s.quit()                                          # Terminating session
 
 app = Flask(__name__)  #says this file is the app obj
 @app.route('/home', methods=['GET', 'POST'])
@@ -102,8 +113,6 @@ def login():
     if request.method == 'GET':
         return render_template('login.html')
     if request.method == 'POST':
-        #*post request not reaching here
-        #*make vars global
         cid = request.form['CompanyId']
         eid = request.form['EmployeeId']
         pw = request.form['pw']
@@ -135,14 +144,14 @@ def company():
             redirect('/login')
         pid = request.form['pidi']
         name = request.form['namei']
-        brand = request.form['brandi']
+        # brand = request.form['brandi']
         desc = request.form['desc']
         quant = request.form['quanti']
         task = request.form['taski']
         fid = request.form['fidi']
         tid = request.form['tidi']
         # print('form data received')
-        if len(pid) == 0 and len(name) != 0 and len(brand) != 0 and len(desc) != 0 and len(quant) != 0:
+        if len(pid) == 0 and len(name) != 0 and len(desc) != 0 and len(quant) != 0:
             #Add product
             # print('adding product')
             checkft = deploy.showC((int(fid), int(tid)))
@@ -151,13 +160,17 @@ def company():
                 data = json.load(response)
                 loc = data['ip'] + ' ' + data['loc'] + ' ' +  data['city'] + ' ' + data['country']
                 e = True if compid == fid else False
-                n = deploy.addP(int(compid), name, brand, desc, int(quant), int(fid), int(tid), e_id, e, task, loc)
-        # d = {'pid':pid, 'name':name, 'brand':brand, 'desc': desc, 'quant': quant, 'task': task, 'fid': fid, 'tid':tid}
-        # print(d)
+                n = deploy.addP(int(compid), name, desc, int(quant), int(fid), int(tid), e_id, e, task, loc)
+                d = {'product id': n, 'name': name, 'description': desc, 'quantitiy': quant, 'from id': fid, 'to id':tid, 
+                     'employee id': e_id, 'task': task, 'loc': loc}
+                message = "A new product has been created under your company at TraceLink! \nHere are the given details: \n"
+                message += str(d)
+                #*checks piece 1
+                sendemail(message, database.getemail(deploy.showDetails(n,1)[2]))
                 return render_template('response_padd.html', data=n)
-            else:
+            else: 
                 return render_template('response_pfail.html')
-        elif len(pid) != 0 and len(name) == 0 and len(brand) == 0 and len(desc) == 0 and len(quant) == 0:
+        elif len(pid) != 0 and len(name) == 0 and len(desc) == 0 and len(quant) == 0:
             checkft = deploy.showC((int(fid), int(tid)))
             pdata = deploy.showDetails(int(pid), 1)
             print(len(checkft[0]), len(checkft[1]), pdata, len(e_id), len(compid))
@@ -167,6 +180,11 @@ def company():
                 loc = data['ip'] + ' ' + data['loc'] + ' ' +  data['city'] + ' ' + data['country']
                 e = True if compid == fid else False
                 n = deploy.storePi(int(pid), int(fid), int(tid), e_id, e, task, loc)
+                d = {'product id': pid, 'from id': fid, 'to id':tid, 'employee id': e_id, 'task': task, 'loc': loc}
+                message = "A new log has been added to your product at TraceLink! \nHere are the given details: \n"
+                message += str(d)
+                #*checks piece 1
+                sendemail(message, database.getemail(deploy.showDetails(n,1)[2]))
                 return render_template('response_psc.html')
             else:
                 return render_template('response_pfail.html')

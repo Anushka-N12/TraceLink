@@ -86,7 +86,7 @@ function add2sc() {
     reg.style.borderRadius = '5px';
     // if (inp1 == '.b1') {
     document.getElementById('pid').style.position = 'relative';
-    document.getElementById('pid').style.top = '120px';
+    document.getElementById('pid').style.top = '65px';
     var alls = document.querySelectorAll('.all');
     alls.forEach(function (all) {
         all.style.position = 'relative';
