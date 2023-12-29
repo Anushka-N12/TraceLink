@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
     integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" , href="../static/styles/addp.css">
 {% endblock %}
 
 {% block nav %}
@@ -17,7 +18,6 @@
 
 {% block custom %}
 Product successfully added! Your product number is {{data}}. Each piece of your product will now be like
-numberxquantity, eg. piece 49 of product 123 will be 123x49.
-<br>
-<a id="download" href="{{url_for('download')}}">Download</a>
+numberxquantity, eg. piece 49 of product 123 will be 123x49. Click
+<u><a class="download" href="{{url_for('download')}}">here</a></u> to download your products' QR codes.
 {% endblock %}
