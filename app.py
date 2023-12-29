@@ -108,6 +108,10 @@ def result():
                 requests.get(blah)
             else:
                 print('Supposed to turn red')
+                message = "A suspicious product has been detected by TraceLink! \nHere are the product details: \n"
+                message += str(data)
+                #*checks piece 1
+                sendemail(message, os.getenv('gmail'))
                 blah = esp2 + '/LED=ON'
                 print(blah)
                 requests.get(blah)
@@ -139,11 +143,12 @@ def login():
             else:
                 return render_template('response_loginf.html')
         elif len(cid) == 0 and len(pw) == 0 and len(rcid) != 0 and len(mailid) != 0:
-            pass #register
-            #Teams must integrate company login portal here
-            # and update the email db
-        # d = {'cid': cid, 'eid': eid, 'pw': pw, 'mailid': mailid, 'rcid': rcid}
-        # print(d)
+            data = {'registered company id': rcid, 'employee id': eid, 'mail id': mailid}
+            message = "A new company wants to join TraceLink! \nHere are the given details: \n"
+            message += str(data)
+            sendemail(message, os.getenv('gmail'))
+            return render_template('response_register.html')
+            #Teams should integrate company login portal here
 
 prid = ''
 prnum = ''
