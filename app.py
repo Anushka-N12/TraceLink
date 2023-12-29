@@ -1,12 +1,13 @@
 #Import neccessary libraries
-from flask import Flask, render_template, request, redirect, make_response, Response  #Main backend framework
+from flask import Flask, render_template, request, redirect, make_response, Response, send_file  #Main backend framework
 import subprocess                      # To run scripts
 import deploy                          # Script that runs the smart contract and has functions to interact with it
 import time                            # To take timestamps when changes are made
 from datetime import datetime          # To convert timestamps to readable format
 import json, os                        # Reading & writing data of JSON format, accessing environment variables
 from dotenv import load_dotenv         # Access to environment variables
-import cam, logo_d, database           # Script that GETs data from camera, logo detector, SQL database access
+import cam, logo_d                     # Script that GETs data from camera, logo detector
+import database, qr                    # SQL database access, QR code zip file generator
 import requests                        # To send GET request to ESP32
 from urllib.request import urlopen     # For getting current location
 import smtplib                         # To send emails aka alerts
@@ -23,7 +24,7 @@ def format_data(num):
         id = 'Product Id: ' + str(pdata[0]) + '\n'
         name = 'Product Name: ' + str(pdata[1]) + '\n'
         brand = 'Brand: ' + str(deploy.showC((pdata[2], pdata[2]))[0]) + '\n'
-        desc = 'Description: ' + str(pdata[3])
+        desc = 'Description: ' + str(pdata[3] + '\n')
         quant = 'Quantity Ordered: ' + str(len(pdata[4])) + '\n'
         piece = 'Your piece is no. : ' + str(pnum) + '\n'
         clicks = 'No. of times this piece has been checked: ' + str(pdata[4][int(pnum)-1]) + '\n'
@@ -74,7 +75,7 @@ def home():
 @app.route('/qr/<num>', methods=['GET'])
 def show(num):
     return render_template('home.html', data = format_data(num))
-    
+
 @app.route('/hardware', methods=['GET'])
 def result():
     t = time.time()
@@ -144,10 +145,14 @@ def login():
         # d = {'cid': cid, 'eid': eid, 'pw': pw, 'mailid': mailid, 'rcid': rcid}
         # print(d)
 
+prid = ''
+prnum = ''
 @app.route('/company', methods=['GET', 'POST'])
 def company():
     global compid
     global e_id
+    global prid
+    global prnum
     if request.method == 'GET':
         return render_template('add.html')
     if request.method == 'POST':
@@ -178,6 +183,9 @@ def company():
                 message += str(d)
                 #*checks piece 1
                 sendemail(message, database.getemail(deploy.showDetails(n,1)[2]))
+                print(pid, quant)
+                prid = int(n)
+                prnum = int(quant)
                 return render_template('response_padd.html', data=n)
             else: 
                 return render_template('response_pfail.html')
@@ -201,6 +209,13 @@ def company():
                 return render_template('response_pfail.html')
         else:
             return render_template('response_pfail.html')
+        
+@app.route('/download', methods=['GET'])
+def download():
+    global prid
+    global prnum
+    zip = qr.makecodes('http://127.0.0.1:5000', prid, prnum)
+    return send_file(zip)
 
 # @app.route('/hardware/<num>', methods=['GET'])
 # def send(num):

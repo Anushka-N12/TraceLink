@@ -18,5 +18,6 @@
 {% block custom %}
 Product successfully added! Your product number is {{data}}. Each piece of your product will now be like
 numberxquantity, eg. piece 49 of product 123 will be 123x49.
-<button type="button" id="download" onclick="download()">Download</button>
+<br>
+<a id="download" href="{{url_for('download')}}">Download</a>
 {% endblock %}

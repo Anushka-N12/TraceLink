@@ -179,87 +179,38 @@ contract TraceLink {
         addCompany("Factory Express", "Contract factory");
         addCompany("AliBaba", "Large E-commerce store");
         StoreProduct(
-            1,
-            "GG Marmount Small Shoulder Bag",
-            '2023 Winter Collection',
-            50,
-            1,
-            1,
-            "m00851749", //Automatically taken
-            true,
-            "Order given to our factory 112 in Ajman",
-            "Al Sufouh, Dubai"  //Automatically taken
+            1, "GG Marmount Small Shoulder Bag", '2023 Winter Collection', 50, 1, 1, 
+            "m00 851749", //Automatically taken
+            true, "Order given to our factory 112 in Ajman", "Al Sufouh, Dubai"  //Automatically taken
         );
-        StoreSCS(
-                    1,
-                    1,
-                    1,
-                    'm00375638',
-                    true,
-                    'Manufactured products handed over to our warehouse 065',
-                    'Sreet 24, Ajman'
+        StoreSCS(1, 1, 1, 'm00375638', true, 'Manufactured products handed over to our warehouse 065',
+                'Sreet 24, Ajman'
                 );
-        StoreSCS(
-                    1,
-                    1,
-                    5,
-                    'm003732439',
-                    true,
-                    'Handed over to Offer House Ent. for retail sales',
-                    'JLT, Dubai'
+        StoreSCS(1, 1, 5, 'm003732439', true, 'Handed over to Offer House Ent. for retail sales',
+                'JLT, Dubai'
                 );
-        StoreProduct(
-            6,
-            "Weixi T 11",
-            '2023 Main Release',
-            100,
-            6,
-            7,
+        StoreProduct(6, "Weixi T 11", '2023 Main Release', 100, 6, 7,
             "xab3857x", //Automatically taken
-            true,
-            "Order given to outsourced factory Express in X province",
+            true, "Order given to outsourced factory Express in X province",
             "Shanghai, China"  //Automatically taken
         );
-        StoreSCS(
-                    2,
-                    7,
-                    8,
-                    'dfjhb7777',
-                    true,
-                    'Shipped to Alibaba warehouse 201',
-                    'X Province, China'
+        StoreSCS(2, 7, 8, 'dfjhb7777', true, 'Shipped to Alibaba warehouse 201',
+                'X Province, China'
                 );
         addCompany("Iran Farmers' Union", "Saffron Farming Corporation");
         addCompany('Blackmores', 'Herb Packaging');
-        StoreProduct(
-            10,
-            "Grade 1 Pure Saffron ",
-            'Negin & Sargol parts of stigma hand-picked',
-            50,
-            9,
-            10,
+        StoreProduct(10, "Grade 1 Pure Saffron ", 'Negin & Sargol parts of stigma hand-picked',
+            50, 9, 10,
             "12948738-435", //Automatically taken
-            false,
-            "Produce transporting to packaging venue",
+            false, "Produce transporting to packaging venue",
             "Tehran, Iran"  //Automatically taken
         );
-        StoreSCS(
-                    3,
-                    10,
-                    2,
-                    'm00375638',
-                    true,
-                    'Exporting 5kg of produce ie. 50 pieces globally',
-                    'Jebel Ali Port, Dubai'
+        StoreSCS(3, 10, 2, 'm00375638', true, 'Exporting 5kg of produce ie. 50 pieces globally',
+                'Jebel Ali Port, Dubai'
                 );
-        StoreSCS(
-                    3,
-                    2,
-                    4,
-                    'm00375638',
-                    true,
-                    '25kg given to Madina',
-                    'Jebel Ali Port, Dubai'
+        StoreSCS(3, 2, 4,
+                'm00375638', true,
+                '25kg given to Madina', 'Jebel Ali Port, Dubai'
                 );
         addCompany("xpharma", "sample for login testing");
     }
