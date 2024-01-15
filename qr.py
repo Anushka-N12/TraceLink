@@ -28,4 +28,4 @@ def makecodes(url, id, q):
 
     # return resp
 if __name__ == '__main__':
-    print(makecodes('http://127.0.0.1:5000', 1, 2))
+    print(makecodes('http://127.0.0.1:5000', 3, 21))

@@ -62,7 +62,7 @@ def sendemail(message, emailid):
     s.sendmail(os.getenv('gmail'), emailid, message)  # Sending
     s.quit()                                          # Terminating session
 
-app = Flask(__name__)  #says this file is the app obj
+app = Flask(__name__)  #says this file is the app object
 @app.route('/home', methods=['GET', 'POST'])
 def home():
     if request.method == 'GET':
@@ -90,10 +90,13 @@ def result():
             qr = qr[0]
             num = qr.split('/')[-1].split('x')
             pid, pnum = num[0], num[1]
-            data = deploy.showDetails(int(pid), int(pnum))
-            name = data[2].lower()
+            pdata = deploy.showDetails(int(pid), int(pnum))
+            data = str(deploy.showC((pdata[2], pdata[2]))[0])
+            name = data.lower()
+            print('QR company: ', name)
             print('Detecting pic')
             logo = logo_d.detect()
+            print('Logo detection list: ', logo)
             for i in logo:
                 if name in i.lower():
                     result = True
@@ -109,7 +112,7 @@ def result():
             else:
                 print('Supposed to turn red')
                 message = "A suspicious product has been detected by TraceLink! \nHere are the product details: \n"
-                message += str(data)
+                message += str(pdata)
                 #*checks piece 1
                 sendemail(message, os.getenv('gmail'))
                 blah = esp2 + '/LED=ON'
