@@ -1,12 +1,5 @@
 flask
-time
-datetime
-json
-os
-dotenv
-requests
-urllib
-smtplib  
+requests 
 opencv-python
 numpy
 pyzbar
@@ -14,8 +7,5 @@ pymysql
 pandas
 py-solc-x==0.6.0
 web3
-io
 google.cloud
 qrcode
-zipfile
-gunicorn==20.0.4
