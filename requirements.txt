@@ -19,3 +19,4 @@ io
 google.cloud
 qrcode
 zipfile
+gunicorn==20.0.4
