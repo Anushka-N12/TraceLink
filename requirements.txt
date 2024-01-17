@@ -2,6 +2,7 @@ flask
 requests 
 opencv-python
 numpy
+dotenv
 pyzbar
 pymysql
 pandas
