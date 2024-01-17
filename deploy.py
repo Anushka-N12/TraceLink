@@ -74,6 +74,7 @@ def showC(section):
 def addP(company, name, desc, quant, fid, tid, e_id, e, task, loc):
     funcs.StoreProduct(company, name, desc, quant, fid, tid, e_id, e, task, loc).transact({'from':w3.eth.accounts[0]})
     return(funcs.showCP().call()[1])
+
 def storePi(pid, fid, tid, e_id, e, task, loc):
     funcs.StoreSCS(pid, fid, tid, e_id, e, task, loc).transact({'from':w3.eth.accounts[0]})
 

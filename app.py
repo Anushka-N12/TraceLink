@@ -198,24 +198,28 @@ def company():
             else: 
                 return render_template('response_pfail.html')
         elif len(pid) != 0 and len(name) == 0 and len(desc) == 0 and len(quant) == 0:
+            print('trying to add log')
             checkft = deploy.showC((int(fid), int(tid)))
             pdata = deploy.showDetails(int(pid), 1)
             print(len(checkft[0]), len(checkft[1]), pdata, len(e_id), len(compid))
+            print('checking entries...')
             if len(checkft[0]) > 0 and len(checkft[1]) > 0 and pdata != 0 and len(e_id) > 0 and len(compid) > 0:
                 response = urlopen('http://ipinfo.io/json')  #add user ip before json for deployment
                 data = json.load(response)
                 loc = data['ip'] + ' ' + data['loc'] + ' ' +  data['city'] + ' ' + data['country']
                 e = True if compid == fid else False
-                n = deploy.storePi(int(pid), int(fid), int(tid), e_id, e, task, loc)
+                deploy.storePi(int(pid), int(fid), int(tid), e_id, e, task, loc)
                 d = {'product id': pid, 'from id': fid, 'to id':tid, 'employee id': e_id, 'task': task, 'loc': loc}
                 message = "A new log has been added to your product at TraceLink! \nHere are the given details: \n"
                 message += str(d)
                 #*checks piece 1
-                sendemail(message, database.getemail(deploy.showDetails(n,1)[2]))
+                sendemail(message, database.getemail(deploy.showDetails(int(pid),1)[2]))
                 return render_template('response_psc.html')
             else:
+                print('issue with data')
                 return render_template('response_pfail.html')
         else:
+            print('not qualified for addition')
             return render_template('response_pfail.html')
         
 @app.route('/download', methods=['GET'])
