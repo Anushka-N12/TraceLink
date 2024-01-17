@@ -1,8 +1,8 @@
 flask
 requests 
 opencv-python
+python-dotenv
 numpy
-dotenv
 pyzbar
 pymysql
 pandas
