@@ -1,4 +1,4 @@
-#Import neccessary libraries
+#Import neccessary packages
 from flask import Flask, render_template, request, redirect, make_response, Response, send_file  #Main backend framework
 import subprocess                      # To run scripts
 import deploy                          # Script that runs the smart contract and has functions to interact with it
@@ -12,15 +12,18 @@ import requests                        # To send GET request to ESP32
 from urllib.request import urlopen     # For getting current location
 import smtplib                         # To send emails aka alerts
 
+# Running deploy.py file to deploy contract
 subprocess.run(["python", "deploy.py"])
 # subprocess.run(["python", "cam.py"])
 
+# Loading environment variables
 load_dotenv('.env')
 
+# Function to format product data to readable format
 def format_data(num):
     pid, pnum = num.split('x')
     pdata = deploy.showDetails(int(pid), int(pnum))
-    if pdata != 0:
+    if pdata != 0:   # If product is found
         id = 'Product Id: ' + str(pdata[0]) + '\n'
         name = 'Product Name: ' + str(pdata[1]) + '\n'
         brand = 'Brand: ' + str(deploy.showC((pdata[2], pdata[2]))[0]) + '\n'
@@ -31,9 +34,9 @@ def format_data(num):
         sections = pdata[5]
         entries = ' \n'
         count = 1
-        print(sections)
-        for i in sections:
-            print(i)
+        # print(sections)
+        for i in sections:   # For each log
+            # print(i)
             entries += f'-- \n Entry {count} - \n'
             cs = deploy.showC((i[1], i[2]))
             fc, tc = cs[0], cs[1]
@@ -41,7 +44,7 @@ def format_data(num):
             entries += f'\tDetails: {i[5]}\n'
             entries += f'\tLocation of entry: {i[6]}\n'
             entries += f'\tTime of entry: {datetime.fromtimestamp(i[7])}\n'
-            if i[4]:
+            if i[4]:    # To determine if enterer is from or to company
                 enterer = fc
             else:
                 enterer = tc
@@ -53,6 +56,7 @@ def format_data(num):
     else:
         return 'Product not found'
 
+# Function to send email, given message & reciever ID
 def sendemail(message, emailid):
     s = smtplib.SMTP('smtp.gmail.com', 587)           # Starting session
     s.starttls()                                      # Starting TLS for security
@@ -62,69 +66,72 @@ def sendemail(message, emailid):
     s.sendmail(os.getenv('gmail'), emailid, message)  # Sending
     s.quit()                                          # Terminating session
 
-app = Flask(__name__)  #says this file is the app object
+# Creating main application object
+app = Flask(__name__) 
+
+# Main route for displaying product details
 @app.route('/home', methods=['GET', 'POST'])
 def home():
-    if request.method == 'GET':
+    if request.method == 'GET':                            # User to enter ID manually
         return render_template('home.html')
-    elif request.method == 'POST':
+    elif request.method == 'POST':                         # Shows data after given ID
         data = format_data(request.form['ProductId'])
         return render_template('home.html', data = data)
 
-#To show page from scanned QR code
+# Route to show product details from scanned QR code
 @app.route('/qr/<num>', methods=['GET'])
 def show(num):
     return render_template('home.html', data = format_data(num))
 
+# Route to trigger hardware
 @app.route('/hardware', methods=['GET'])
 def result():
-    t = time.time()
-    # while time.time()-t < 30:
-    if True:
-        result = False
-        #might have to move run here
-        url = os.getenv('esp_1')
-        print('Taking pic')
-        qr = cam.getimg(url)
-        if len(qr) > 0:
-            qr = qr[0]
-            num = qr.split('/')[-1].split('x')
-            pid, pnum = num[0], num[1]
-            pdata = deploy.showDetails(int(pid), int(pnum))
-            data = str(deploy.showC((pdata[2], pdata[2]))[0])
-            name = data.lower()
-            print('QR company: ', name)
-            print('Detecting pic')
-            logo = logo_d.detect()
-            print('Logo detection list: ', logo)
-            for i in logo:
-                if name in i.lower():
-                    result = True
-        print('Triggering esp')
-        esp2 = os.getenv('esp_2')
-        print(esp2)
-        try:
-            if result:
-                print('Supposed to turn green')
-                blah = esp2 + '/LED=OFF'
-                print(blah)
-                requests.get(blah)
-            else:
-                print('Supposed to turn red')
-                message = "A suspicious product has been detected by TraceLink! \nHere are the product details: \n"
-                message += str(pdata)
-                #*checks piece 1
-                sendemail(message, os.getenv('gmail'))
-                blah = esp2 + '/LED=ON'
-                print(blah)
-                requests.get(blah)
-        except:
-            pass
+    result = False
+    url = os.getenv('esp_1')     # IP address of camera
+    print('Taking pic')
+    qr = cam.getimg(url)         # Taking pic using cam.py script
+    if len(qr) > 0:              # If QR code found & read
+        qr = qr[0]
+        num = qr.split('/')[-1].split('x')                  # Get product ID
+        pid, pnum = num[0], num[1]                          # Get ID & piece number
+        pdata = deploy.showDetails(int(pid), int(pnum))     # Get data
+        data = str(deploy.showC((pdata[2], pdata[2]))[0])   # Get company name
+        name = data.lower()
+        print('QR company: ', name)
+        print('Detecting pic')
+        logo = logo_d.detect()                 # Detecting logo from camera image using logo_d.py script
+        print('Logo detection list: ', logo)
+        for i in logo:
+            if name in i.lower():
+                result = True                  # Real, if any proccessed frames match
+    print('Triggering esp')
+    esp2 = os.getenv('esp_2')                  # IP address of microcontroller server that controls LEDs
+    print(esp2)
+    try:
+        if result:   # Turn green if real
+            print('Supposed to turn green')
+            blah = esp2 + '/LED=OFF'
+            print(blah)
+            requests.get(blah)
+        else:        # Turn red if fake, and send email alert to authority email
+            print('Supposed to turn red')
+            message = "A suspicious product has been detected by TraceLink! \nHere are the product details: \n"
+            message += str(pdata)
+            #*checks piece 1
+            sendemail(message, os.getenv('gmail'))
+            blah = esp2 + '/LED=ON'
+            print(blah)
+            requests.get(blah)
+    except:
+        pass
         
     return 'working'
 
+# Global variables used to track login
 compid = ''
 e_id = ''
+
+# Route to login page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     global compid
@@ -137,24 +144,35 @@ def login():
         pw = request.form['pw']
         mailid = request.form['Wemail']
         rcid = request.form['rcid']
+        #Checking if attempt is to login or register
         if len(cid) != 0 and len(pw) != 0 and len(rcid) == 0 and len(mailid) == 0:
-            if database.authenticate(cid, eid, pw):
+            # Trying to login
+            #Verifying login details using database.py script
+            if database.authenticate(cid, eid, pw): 
+                # Assigning values to global variables
                 compid = cid
                 e_id = eid
-                # print('login details saved')
+                print('login details saved')
+                # Redirecting to company page
                 return redirect('/company')
             else:
+                # If authentication fails, redirect to page saying so
                 return render_template('response_loginf.html')
         elif len(cid) == 0 and len(pw) == 0 and len(rcid) != 0 and len(mailid) != 0:
+            # Registering
             data = {'registered company id': rcid, 'employee id': eid, 'mail id': mailid}
             message = "A new company wants to join TraceLink! \nHere are the given details: \n"
             message += str(data)
+            # Sending email with given company details to authority email
             sendemail(message, os.getenv('gmail'))
+            # Redirecting to page with appropriate message 
             return render_template('response_register.html')
-            #Teams should integrate company login portal here
 
+# More global variables to use later
 prid = ''
 prnum = ''
+
+# Route to company page, with option to add details
 @app.route('/company', methods=['GET', 'POST'])
 def company():
     global compid
@@ -168,52 +186,63 @@ def company():
             redirect('/login')
         pid = request.form['pidi']
         name = request.form['namei']
-        # brand = request.form['brandi']
         desc = request.form['desc']
         quant = request.form['quanti']
         task = request.form['taski']
         fid = request.form['fidi']
         tid = request.form['tidi']
-        # print('form data received')
+        # Checking if attempt is product or log addition
         if len(pid) == 0 and len(name) != 0 and len(desc) != 0 and len(quant) != 0:
             #Add product
-            # print('adding product')
             checkft = deploy.showC((int(fid), int(tid)))
+            # Checking if companies exist
             if len(checkft[0]) > 0 and len(checkft[1]) > 0 and len(e_id) > 0 and len(compid) > 0:
-                response = urlopen('http://ipinfo.io/json')  #add user ip before json for deployment
+                # Getting location from IP address
+                response = urlopen('http://ipinfo.io/json')
                 data = json.load(response)
+                # Formatting response
                 loc = data['ip'] + ' ' + data['loc'] + ' ' +  data['city'] + ' ' + data['country']
                 e = True if compid == fid else False
+                # Adding product
                 n = deploy.addP(int(compid), name, desc, int(quant), int(fid), int(tid), e_id, e, task, loc)
                 d = {'product id': n, 'name': name, 'description': desc, 'quantitiy': quant, 'from id': fid, 'to id':tid, 
                      'employee id': e_id, 'task': task, 'loc': loc}
                 message = "A new product has been created under your company at TraceLink! \nHere are the given details: \n"
                 message += str(d)
-                #*checks piece 1
+                # Sending email to company
                 sendemail(message, database.getemail(deploy.showDetails(n,1)[2]))
                 print(pid, quant)
                 prid = int(n)
                 prnum = int(quant)
+                # Redirecting to page with appropriate message 
                 return render_template('response_padd.html', data=n)
             else: 
+                # If companies don't exist or are not allowed
                 return render_template('response_pfail.html')
         elif len(pid) != 0 and len(name) == 0 and len(desc) == 0 and len(quant) == 0:
+            # Adding log
             print('trying to add log')
+            # Getting company names
             checkft = deploy.showC((int(fid), int(tid)))
+            # Getting product
             pdata = deploy.showDetails(int(pid), 1)
             print(len(checkft[0]), len(checkft[1]), pdata, len(e_id), len(compid))
             print('checking entries...')
+            # Checking if companies exist
             if len(checkft[0]) > 0 and len(checkft[1]) > 0 and pdata != 0 and len(e_id) > 0 and len(compid) > 0:
+                # Getting location from IP address
                 response = urlopen('http://ipinfo.io/json')  #add user ip before json for deployment
                 data = json.load(response)
                 loc = data['ip'] + ' ' + data['loc'] + ' ' +  data['city'] + ' ' + data['country']
                 e = True if compid == fid else False
+                # Adding log to product
                 deploy.storePi(int(pid), int(fid), int(tid), e_id, e, task, loc)
                 d = {'product id': pid, 'from id': fid, 'to id':tid, 'employee id': e_id, 'task': task, 'loc': loc}
                 message = "A new log has been added to your product at TraceLink! \nHere are the given details: \n"
                 message += str(d)
-                #*checks piece 1
+                # Sending email to company
                 sendemail(message, database.getemail(deploy.showDetails(int(pid),1)[2]))
+                # Redirecting to page with appropriate message 
                 return render_template('response_psc.html')
             else:
                 print('issue with data')
@@ -221,11 +250,13 @@ def company():
         else:
             print('not qualified for addition')
             return render_template('response_pfail.html')
-        
+
+# Route triggered by download button         
 @app.route('/download', methods=['GET'])
 def download():
     global prid
     global prnum
+    # Generates zipfile of QR codes upon product creation using the qr.py script
     zip = qr.makecodes('http://127.0.0.1:5000', prid, prnum)
     return send_file(zip)
 
@@ -256,8 +287,8 @@ def download():
 #         response.headers['X-My-Header'] = 'foo'
 #         return response, 200
 
+# Running the application
 if __name__ == '__main__':
-    #DO not remove any Code below
     #port = int(sys.argv[1])
     app.run(debug=True) #, host="0.0.0.0", port=port
-#now run in console to get localhost number
+# Now run in console to get localhost number

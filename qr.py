@@ -1,6 +1,9 @@
+# Script to generate QR codes upon product creation
+# Importing required packages
 import os, qrcode, zipfile
 
-def makecodes(url, id, q):
+# FUnction used by app.py
+def makecodes(url, id, q):    # Takes url, product ID & quantity
     for i in range(1, q + 1):
         img = qrcode.make(url + '/qr/' + f'{id}x'+ str(i))
         img.save('QR_codes/'f'{id}x{str(i)}.png')
@@ -13,19 +16,7 @@ def makecodes(url, id, q):
                 z.write(filepath)
                 os.remove(filepath)
     return fname
-            
-    # folder = os.path.join(r'C:\Users\anush\Projects\TraceLink', 'QR_codes')
-    # for i, imgfile in enumerate(image_list):
-    #     with open(os.path.join(folder, str(i)), 'wb+') as f:
-    #         f.write(imgfile)
-    # response = HttpResponse(content_type='application/zip')
-    # s = StringIO.StringIO()
 
-    # resp = HttpResponse(s.getvalue(), content_type = "application/x-zip-compressed")
-    # resp['Content-Disposition'] = 'attachment; filename=gik.zip'
-    
-    #Delete imgs in dir
-
-    # return resp
+# Test to execute only if this file is executed directly    
 if __name__ == '__main__':
     print(makecodes('http://127.0.0.1:5000', 3, 21))

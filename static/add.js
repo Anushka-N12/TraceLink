@@ -1,3 +1,4 @@
+// This script is not being used at the moment
 function add(inp1, inp1i, inp2, inp2i, b_1, b_2) {
     const b2s = document.querySelectorAll(inp1);
     b2s.forEach(function (b2) {

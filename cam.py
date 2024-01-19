@@ -1,3 +1,7 @@
+# Script to get & save images from url
+# https://www.digikey.com/en/maker/projects/esp32-cam-python-stream-opencv-example/840608badd0f4a5eb21b1be25ecb42cb
+
+# Importing required packages
 import cv2
 import numpy as np
 import requests
@@ -31,13 +35,12 @@ def set_awb(url: str, awb: int=1):
         print("SET_QUALITY: something went wrong")
     return awb
 
+# Function used by app.py to get image
 def getimg(url):
-    # print(url)
-    # print(type(url))s
     cap = cv2.VideoCapture(url + ":81/stream")
     set_resolution(url, index=8)
     n,x = 0,[]
-    while n!= 20:
+    while n!= 20:   # Processes 20 frames
         try:
             if cap.isOpened():
                 cap.set(cv2.CAP_PROP_BUFFERSIZE, 0)
@@ -51,7 +54,7 @@ def getimg(url):
                 # frame.set(5,640)
                 # frame.set(6,480)
                 for i in decode(frame):
-                    x.append(i.data.decode('utf-8'))
+                    x.append(i.data.decode('utf-8'))   # Reads QR code
         except:
             pass
 
@@ -60,6 +63,7 @@ def getimg(url):
     print(x)
     return x
 
+# Test to execute only if this file is executed directly
 if __name__ == '__main__':
     print(getimg('http://10.5.35.138'))
 

@@ -1,6 +1,10 @@
+// This script changes the options based on choice, bw register & login
+
+// Login is shown initially
 var log_in = true;
 function login() {
 
+    // Hiding register inputs
     var newls = document.querySelectorAll('.newl');
     newls.forEach(function (newl) {
         newl.style.visibility = 'hidden';
@@ -12,6 +16,8 @@ function login() {
         newi.style.border = 'none';
         newi.style.opacity = '0';
     });
+
+    // Making login inputs visible
     var stds = document.querySelectorAll('.normal');
     stds.forEach(function (std) {
         std.style.translate = '0 50px';
@@ -19,6 +25,8 @@ function login() {
         std.style.opacity = '1';
         std.required = true;
     });
+
+    // Styling options based on choice
     var reg = document.getElementById('reg')
     reg.style.border = '1.5px solid #dae9f7';
     reg.style.borderRadius = '5px';
@@ -33,6 +41,7 @@ function login() {
 
 function signup() {
 
+    // Making register inputs visible
     var newls = document.querySelectorAll('.newl');
     newls.forEach(function (newl) {
         newl.style.visibility = 'visible';
@@ -44,6 +53,8 @@ function signup() {
         newi.style.border = '1.5px solid #dae9f7';
         newi.style.opacity = '1';
     });
+
+    // Hiding login inputs
     var stds = document.querySelectorAll('.normal');
     stds.forEach(function (std) {
         std.style.translate = '0 0';
@@ -51,6 +62,8 @@ function signup() {
         std.style.opacity = '0';
         std.required = false;
     });
+
+    //Styling options based on choice
     var reg = document.getElementById('reg')
     reg.style.border = 'none';
     reg.style.borderBottom = '1.5px solid #dae9f7';

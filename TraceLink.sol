@@ -1,28 +1,31 @@
-//SPDX-License_Identifier: MIT (open-source)
-pragma solidity ^0.6.0;
-pragma experimental ABIEncoderV2;
+// SPDX-License_Identifier: MIT (open-source)
+pragma solidity ^0.6.0;               // Solidity Version
+pragma experimental ABIEncoderV2;     // Library for calculations
 
+// Contract that defines all data structures & functions
 contract TraceLink {
-    //state variables
-    mapping(uint => Product) public Pmap;
-    uint public PmapSize = 0;
-    mapping(uint => Company) public Cmap;
-    uint public CmapSize = 0;
-    // Product[] public Product_arr;
-    // Company[] public Company_arr;
+    // State variables
+    mapping(uint => Product) public Pmap;   // Mapping for products
+    uint public PmapSize = 0;               // Size of above mapping
+    mapping(uint => Company) public Cmap;   // Mapping for companies
+    uint public CmapSize = 0;               // Size of above mapping
+
+    // Global variables used for functions
     uint current_pid;
     uint current_fcid;
     uint current_tcid;
 
+    // Product structure with attributes
     struct Product {
         uint PId;
         string PName;
         uint Brand;
         string Desc;
-        int[] clicks;
-        SCSection[] SChain;
+        int[] clicks;          // Will be size of quantity, initialized to 0s
+        SCSection[] SChain;    // Will contain logs
     }
 
+    // Company structure will attributes
     struct Company {
         uint CId;
         string CName;
@@ -30,12 +33,13 @@ contract TraceLink {
         uint[] CProducts;
     }
 
+    // Log structure will attributes
     struct SCSection {
         uint ProductId;
         uint FromId;
         uint ToId;
         string EmpId;
-        bool comp;
+        bool comp;     //Used for internal logic
         string Task;
         string Location;
         uint TimeOfHandOver;
@@ -43,7 +47,7 @@ contract TraceLink {
 
     //Function or TRANSACTION that updates the product array
     //Company Id here will be picked up during login time
-    //Timestamps will be converted to readable format in python
+    //Timestamps & location will be taken automatically in backend
     function StoreProduct(
         uint CompanyId,
         string memory ProductName,
@@ -57,15 +61,15 @@ contract TraceLink {
         string memory Current_Location
     ) public returns (uint ProductId) {
         ProductId = PmapSize + 1;
-        Product storage p = Pmap[ProductId];
-        p.PId = ProductId;
+        Product storage p = Pmap[ProductId];    // Declaring product
+        p.PId = ProductId;                      // Assigning values
         p.PName = ProductName;
         p.Brand = CompanyId;
         p.Desc = pdesc;
-        for (uint256 i = 0; i < quant; i++) {
+        for (uint256 i = 0; i < quant; i++) {   // Adding 0s, quant times
             p.clicks.push(0);
         }
-        p.SChain.push(
+        p.SChain.push(        // Adding first log
             SCSection(
                 PmapSize + 1,
                 FId,
@@ -82,11 +86,7 @@ contract TraceLink {
         return ProductId;
     }
 
-    //The PMap doesn't directly show me the SChain when I run transactions in the Remix sidebar,
-    // so I just wrote another function to get them explicitly.
-    // function showsc(uint pid) public view returns(SCSection[] memory sc){sc = Pmap[pid].SChain;}
-
-    //Show functions to call externally
+    // Function to get company names from company IDs
     function showC()
         public
         view
@@ -97,26 +97,26 @@ contract TraceLink {
         return (fc, tc);
     }
 
+    // Function that assigns IDs to global variables to be used by showC()
     function updateCft(uint fcid, uint tcid) public {
         current_fcid = fcid;
         current_tcid = tcid;
     }
 
+    // Function that returns assigned product ID
     function showPDetails() public view returns (Product memory p) {
         p = Pmap[current_pid];
         return p;
     }
 
-    //function to update count, to be called with showPDetails function
+    // Function to update count of product piece
     function updateCount(uint pid, uint piece_num) public {
         Product storage p = Pmap[pid];
         p.clicks[piece_num - 1] += 1;
         current_pid = pid;
     }
 
-    //Function or TRANSACTION that updates the supply chain of a product
-    //It allows only the company that is currently handling the product to add data
-    // *FId below must be taken automatically after user logs in
+    // Function that adds log to product
     function StoreSCS(
         uint Product_Id,
         uint FId,
@@ -129,7 +129,7 @@ contract TraceLink {
         SCSection[] memory chain = Pmap[Product_Id].SChain;
         uint lastC = chain[chain.length - 1].ToId;
         
-        if ((lastC == FId)
+        if ((lastC == FId)      // Checks if user is allowed to add log
         || (lastC == FId)) {
             Pmap[Product_Id].SChain.push(
                 SCSection(
@@ -146,8 +146,7 @@ contract TraceLink {
         }
     }
 
-    //*Company will be notified whenever any information is added to their product to ensure their awareness of the process
-
+    // Function to add company, internally used
     function addCompany(
         string memory Name,
         string memory CompanyType
@@ -158,7 +157,8 @@ contract TraceLink {
         c.CType = CompanyType;
         CmapSize += 1;
     }
-    
+
+    // Function to show mappping sizes
     function showCP()
         public
         view
@@ -169,6 +169,7 @@ contract TraceLink {
         return (csize, psize);
     }
 
+    // Executes upon contract creation & contains initial data
     constructor() public {
         addCompany("Gucci", "Luxury Fashion");
         addCompany("Globalx", "Logistics");

@@ -1,10 +1,14 @@
+# Script to access local database
+# Importing required packages
 import pymysql as ps
 import pandas as pd
 import os
 from dotenv import load_dotenv
 
+# Loading environment variables
 load_dotenv('.env')
 
+# Function used by app.py to authenticate user during login
 def authenticate(company, id, pw):
     try:
         con = ps.connect(host = 'localhost',
@@ -22,6 +26,7 @@ def authenticate(company, id, pw):
     except: 
         return False
     
+# Function used by app.py to get company email
 def getemail(company):
     try:
         con = ps.connect(host = 'localhost',
@@ -35,7 +40,8 @@ def getemail(company):
         return df
     except:
         return ''
-    
+
+# Test to execute only if this file is executed directly    
 if __name__ == '__main__':
     print(authenticate('11', 'anushka.2003', 'Abc123'))
     print(authenticate('11', 'anushka.2003', 'abc12'))
